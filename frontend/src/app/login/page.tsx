@@ -8,10 +8,42 @@ export default function Login() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
+    const [error, setError] = useState('');
+    const [loading, setLoading] = useState(false);
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (email.includes('hr')) router.push('/hr/dashboard');
-        else router.push('/candidate/dashboard');
+        setError('');
+        setLoading(true);
+
+        try {
+            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api'}/auth/login`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, password }),
+            });
+
+            const data = await res.json();
+
+            if (!res.ok) {
+                throw new Error(data.message || 'Login failed');
+            }
+
+            // Save token and role
+            localStorage.setItem('token', data.data.token);
+            localStorage.setItem('role', data.data.role);
+
+            // Redirect based on role
+            if (data.data.role === 'HR') {
+                router.push('/hr/dashboard');
+            } else {
+                router.push('/candidate/dashboard');
+            }
+        } catch (err: any) {
+            setError(err.message);
+        } finally {
+            setLoading(false);
+        }
     };
 
     return (
@@ -24,6 +56,11 @@ export default function Login() {
                 </div>
 
                 <form onSubmit={handleSubmit} className="space-y-6">
+                    {error && (
+                        <div className="p-3 rounded-lg bg-red-500/10 border border-red-500/20 text-red-500 text-sm text-center">
+                            {error}
+                        </div>
+                    )}
                     <div className="space-y-2">
                         <label className="text-sm font-medium text-neutral-300 ml-1">Email Address</label>
                         <input
@@ -53,9 +90,10 @@ export default function Login() {
 
                     <button
                         type="submit"
-                        className="w-full py-4 bg-green-600 hover:bg-green-500 text-white rounded-xl font-semibold shadow-lg shadow-green-600/20 transition-all hover:-tranneutral-y-0.5"
+                        disabled={loading}
+                        className="w-full py-4 bg-green-600 hover:bg-green-500 text-white rounded-xl font-semibold shadow-lg shadow-green-600/20 transition-all hover:-translate-y-0.5 disabled:opacity-50 disabled:hover:translate-y-0"
                     >
-                        Sign In
+                        {loading ? 'Signing In...' : 'Sign In'}
                     </button>
                 </form>
 

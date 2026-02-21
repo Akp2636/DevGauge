@@ -18,10 +18,42 @@ function RegisterForm() {
         if (roleParam === 'HR') setRole('HR');
     }, [searchParams]);
 
+    const [error, setError] = useState('');
+    const [loading, setLoading] = useState(false);
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (role === 'HR') router.push('/hr/dashboard');
-        else router.push('/candidate/dashboard');
+        setError('');
+        setLoading(true);
+
+        try {
+            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api'}/auth/register`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name, email, password, role }),
+            });
+
+            const data = await res.json();
+
+            if (!res.ok) {
+                throw new Error(data.message || 'Registration failed');
+            }
+
+            // Save token and role
+            localStorage.setItem('token', data.data.token);
+            localStorage.setItem('role', data.data.role);
+
+            // Redirect based on role
+            if (data.data.role === 'HR') {
+                router.push('/hr/dashboard');
+            } else {
+                router.push('/candidate/dashboard');
+            }
+        } catch (err: any) {
+            setError(err.message);
+        } finally {
+            setLoading(false);
+        }
     };
 
     return (
@@ -51,6 +83,11 @@ function RegisterForm() {
                 </div>
 
                 <form onSubmit={handleSubmit} className="space-y-5">
+                    {error && (
+                        <div className="p-3 rounded-lg bg-red-500/10 border border-red-500/20 text-red-500 text-sm text-center">
+                            {error}
+                        </div>
+                    )}
                     <div className="space-y-2">
                         <label className="text-sm font-medium text-neutral-300 ml-1">Full Name</label>
                         <input
@@ -89,9 +126,10 @@ function RegisterForm() {
 
                     <button
                         type="submit"
-                        className={`w-full py-4 mt-4 text-white rounded-xl font-semibold shadow-lg transition-all hover:-tranneutral-y-0.5 ${role === 'CANDIDATE' ? 'bg-green-600 hover:bg-green-500 shadow-green-600/20' : 'bg-emerald-600 hover:bg-emerald-500 shadow-emerald-600/20'}`}
+                        disabled={loading}
+                        className={`w-full py-4 mt-4 text-white rounded-xl font-semibold shadow-lg transition-all hover:-translate-y-0.5 disabled:opacity-50 disabled:hover:translate-y-0 ${role === 'CANDIDATE' ? 'bg-green-600 hover:bg-green-500 shadow-green-600/20' : 'bg-emerald-600 hover:bg-emerald-500 shadow-emerald-600/20'}`}
                     >
-                        Create {role === 'CANDIDATE' ? 'Candidate' : 'HR'} Profile
+                        {loading ? 'Creating Account...' : `Create ${role === 'CANDIDATE' ? 'Candidate' : 'HR'} Profile`}
                     </button>
                 </form>
 
