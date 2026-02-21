@@ -3,7 +3,9 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 
-export default function Register() {
+import { Suspense } from 'react';
+
+function RegisterForm() {
     const router = useRouter();
     const searchParams = useSearchParams();
     const [role, setRole] = useState<'CANDIDATE' | 'HR'>('CANDIDATE');
@@ -101,5 +103,13 @@ export default function Register() {
                 </p>
             </div>
         </div>
+    );
+}
+
+export default function Register() {
+    return (
+        <Suspense fallback={<div className="min-h-[85vh] flex items-center justify-center">Loading...</div>}>
+            <RegisterForm />
+        </Suspense>
     );
 }
