@@ -8,32 +8,63 @@ export default function CandidateDashboard() {
     const [profile, setProfile] = useState<any>(null);
     const [loading, setLoading] = useState(true);
 
-    useEffect(() => {
-        const fetchProfile = async () => {
-            const token = localStorage.getItem('token');
-            if (!token) {
-                router.push('/login');
-                return;
-            }
+    // AI Project Form State
+    const [showAddProject, setShowAddProject] = useState(false);
+    const [projectTitle, setProjectTitle] = useState('');
+    const [projectDesc, setProjectDesc] = useState('');
+    const [isAnalyzing, setIsAnalyzing] = useState(false);
 
-            try {
-                const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api'}/candidate/profile`, {
-                    headers: { 'Authorization': `Bearer ${token}` }
-                });
-                if (res.ok) {
-                    const json = await res.json();
-                    setProfile(json.data);
-                } else {
-                    router.push('/login');
-                }
-            } catch (err) {
-                console.error(err);
-            } finally {
-                setLoading(false);
+    const fetchProfile = async () => {
+        const token = localStorage.getItem('token');
+        if (!token) {
+            router.push('/login');
+            return;
+        }
+
+        try {
+            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api'}/candidate/profile`, {
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+            if (res.ok) {
+                const json = await res.json();
+                setProfile(json.data);
+            } else {
+                router.push('/login');
             }
-        };
+        } catch (err) {
+            console.error(err);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    useEffect(() => {
         fetchProfile();
     }, [router]);
+
+    const handleAddProject = async (e: React.FormEvent) => {
+        e.preventDefault();
+        setIsAnalyzing(true);
+        try {
+            const token = localStorage.getItem('token');
+            await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api'}/candidate/projects`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify({ title: projectTitle, description: projectDesc })
+            });
+            await fetchProfile(); // Refresh Data!
+            setShowAddProject(false);
+            setProjectTitle('');
+            setProjectDesc('');
+        } catch (err) {
+            console.error(err);
+        } finally {
+            setIsAnalyzing(false);
+        }
+    };
 
     if (loading) return <div className="flex justify-center items-center h-[60vh] text-neutral-400">Loading Profile...</div>;
     if (!profile) return <div className="flex justify-center items-center h-[60vh] text-red-500">Failed to load profile.</div>;
@@ -124,8 +155,24 @@ export default function CandidateDashboard() {
                     <div className="space-y-4">
                         <div className="flex justify-between items-center mb-6">
                             <h3 className="font-bold text-xl">Verified Projects</h3>
-                            <button className="px-3 py-1.5 bg-green-600 hover:bg-green-500 rounded-lg text-sm font-medium shadow-lg shadow-green-500/20 transition-all">+ Add Project</button>
+                            <button onClick={() => setShowAddProject(!showAddProject)} className="px-3 py-1.5 bg-green-600 hover:bg-green-500 rounded-lg text-sm font-medium shadow-lg shadow-green-500/20 transition-all">
+                                {showAddProject ? 'Cancel' : '+ Add Project'}
+                            </button>
                         </div>
+
+                        {showAddProject && (
+                            <form onSubmit={handleAddProject} className="glass p-6 rounded-xl border border-green-500/50 mb-6 space-y-4 animate-in fade-in slide-in-from-top-2">
+                                <h4 className="font-bold text-green-400 flex items-center gap-2">✨ AI Project Evaluator</h4>
+                                <p className="text-xs text-neutral-400">Paste your project description. Our AI will automatically evaluate its complexity, extract the core skills you used, and adjust your global rating score accordingly.</p>
+
+                                <input required type="text" placeholder="Project Title (e.g. Distributed Task Queue)" value={projectTitle} onChange={e => setProjectTitle(e.target.value)} className="w-full px-4 py-2 rounded-lg bg-neutral-900 border border-neutral-700 outline-none text-sm focus:border-green-500" />
+                                <textarea required rows={4} placeholder="Describe the architecture, scale, and challenges solved..." value={projectDesc} onChange={e => setProjectDesc(e.target.value)} className="w-full px-4 py-2 rounded-lg bg-neutral-900 border border-neutral-700 outline-none text-sm focus:border-green-500 resize-none"></textarea>
+
+                                <button type="submit" disabled={isAnalyzing} className="w-full py-2 bg-green-600 hover:bg-green-500 rounded-lg text-sm font-bold text-white transition-colors disabled:opacity-50">
+                                    {isAnalyzing ? 'Analyzing Complexity & Extracting Skills...' : 'Submit for Evaluation'}
+                                </button>
+                            </form>
+                        )}
 
                         {projects.length === 0 ? (
                             <div className="glass p-8 rounded-xl border border-neutral-800 text-center text-neutral-500">
