@@ -25,7 +25,8 @@ export default function RootLayout({
             <div className="w-8 h-8 rounded-lg bg-gradient-to-tr from-green-600 to-emerald-600 flex items-center justify-center font-bold text-white shadow-lg shadow-green-500/20">JP</div>
             <a href="/" className="font-bold text-lg tracking-tight hover:text-green-300">TalentRank</a>
           </div>
-          <div className="flex gap-4">
+          <div className="flex gap-4 items-center">
+            <a href="/jobs" className="px-4 py-2 text-sm font-medium hover:text-green-400 transition-colors">Jobs</a>
             <a href="/login" className="px-4 py-2 text-sm font-medium hover:text-green-400 transition-colors">Login</a>
             <a href="/register" className="px-4 py-2 text-sm font-medium bg-green-600 hover:bg-green-500 rounded-md transition-colors shadow-lg shadow-green-600/20">Sign Up</a>
           </div>
