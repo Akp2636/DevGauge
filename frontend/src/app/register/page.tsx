@@ -61,7 +61,7 @@ function RegisterForm() {
             <div className="w-full max-w-lg glass p-10 rounded-3xl animate-in fade-in slide-in-from-bottom-4 duration-500 shadow-2xl shadow-emerald-900/10 border border-neutral-700">
                 <div className="text-center mb-8">
                     <h2 className="text-3xl font-bold tracking-tight">Create an Account</h2>
-                    <p className="text-neutral-400 mt-2">Join TalentRank to {role === 'CANDIDATE' ? 'prove your skills' : 'find elite talent'}</p>
+                    <p className="text-neutral-400 mt-2">Join DevGauge to {role === 'CANDIDATE' ? 'prove your skills' : 'find elite talent'}</p>
                 </div>
 
                 {/* Role Toggle */}
