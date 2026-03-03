@@ -52,110 +52,115 @@ function RegisterForm() {
     };
 
     return (
-        <div className="flex items-center justify-center min-h-[85vh] py-12 px-4"
-            style={{ background: 'linear-gradient(135deg, #f8fafc 0%, #f1f5f9 50%, #e2e8f0 100%)' }}>
-
-            {/* Card */}
-            <div className="w-full max-w-md bg-white rounded-2xl shadow-[0_8px_40px_rgba(0,0,0,0.08)] border border-slate-200/80 px-8 py-10"
-                style={{ animation: 'fadeSlideUp 0.4s ease both' }}>
-
-                {/* Header */}
-                <div className="text-center mb-8">
-                    <div className="inline-flex items-center justify-center w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-600 text-white font-black text-sm mb-4 shadow-md shadow-emerald-200">
+        <div
+            className="flex items-center justify-center min-h-[85vh] px-4 py-12"
+            style={{ background: 'linear-gradient(160deg, #f9fafb 0%, #f3f4f6 100%)' }}
+        >
+            <div
+                className="w-full bg-white rounded-2xl border border-gray-200"
+                style={{
+                    maxWidth: 420,
+                    padding: 48,
+                    boxShadow: '0 4px 6px -1px rgba(0,0,0,0.05), 0 10px 40px -8px rgba(0,0,0,0.1)',
+                    animation: 'authFadeUp 0.35s ease both',
+                }}
+            >
+                {/* Brand */}
+                <div className="flex flex-col items-center mb-8">
+                    <div
+                        className="flex items-center justify-center w-11 h-11 rounded-full bg-zinc-900 text-white font-bold text-sm mb-5 select-none"
+                        style={{ boxShadow: '0 2px 8px rgba(0,0,0,0.18)' }}
+                    >
                         DG
                     </div>
-                    <h1 className="text-2xl font-bold text-slate-900 tracking-tight">Create your account</h1>
-                    <p className="text-slate-500 mt-1.5 text-sm">
+                    <h1 className="text-[22px] font-bold text-zinc-900 tracking-tight">Create your account</h1>
+                    <p className="text-sm text-zinc-500 mt-1">
                         {role === 'CANDIDATE'
                             ? 'Showcase your skills to top companies'
-                            : 'Find and hire the best engineering talent'}
+                            : 'Discover and hire top engineering talent'}
                     </p>
                 </div>
 
-                {/* Segmented Role Toggle */}
-                <div className="relative flex bg-slate-100 rounded-xl p-1 mb-7 gap-1">
-                    {/* Sliding indicator */}
+                {/* Segmented Toggle */}
+                <div className="relative flex bg-gray-100 rounded-xl p-[3px] mb-6">
+                    {/* Active slide */}
                     <div
-                        className="absolute top-1 bottom-1 w-[calc(50%-4px)] rounded-lg bg-white shadow-sm border border-slate-200 transition-transform duration-200 ease-in-out"
-                        style={{ transform: role === 'HR' ? 'translateX(calc(100% + 8px))' : 'translateX(0)' }}
+                        className="absolute top-[3px] bottom-[3px] rounded-[9px] bg-zinc-900 transition-transform duration-200 ease-in-out"
+                        style={{
+                            width: 'calc(50% - 3px)',
+                            transform: role === 'HR' ? 'translateX(calc(100% + 3px))' : 'translateX(0)',
+                        }}
                     />
                     <button
                         type="button"
                         onClick={() => setRole('CANDIDATE')}
-                        className={`relative flex-1 py-2.5 px-4 rounded-lg text-sm font-semibold transition-colors duration-150 z-10 ${role === 'CANDIDATE' ? 'text-slate-900' : 'text-slate-500 hover:text-slate-700'
+                        className={`relative flex-1 py-2.5 rounded-[9px] text-sm font-semibold transition-colors duration-150 z-10 ${role === 'CANDIDATE' ? 'text-white' : 'text-zinc-500 hover:text-zinc-700'
                             }`}
                     >
-                        👨‍💻 Candidate
+                        Candidate
                     </button>
                     <button
                         type="button"
                         onClick={() => setRole('HR')}
-                        className={`relative flex-1 py-2.5 px-4 rounded-lg text-sm font-semibold transition-colors duration-150 z-10 ${role === 'HR' ? 'text-slate-900' : 'text-slate-500 hover:text-slate-700'
+                        className={`relative flex-1 py-2.5 rounded-[9px] text-sm font-semibold transition-colors duration-150 z-10 ${role === 'HR' ? 'text-white' : 'text-zinc-500 hover:text-zinc-700'
                             }`}
                     >
-                        🏢 HR / Recruiter
+                        HR / Recruiter
                     </button>
                 </div>
 
                 {/* Error Banner */}
                 {error && (
-                    <div className="mb-5 flex items-start gap-2.5 p-3.5 rounded-lg bg-red-50 border border-red-200 text-red-700 text-sm">
+                    <div className="mb-5 flex items-start gap-2 p-3 rounded-lg bg-red-50 border border-red-200 text-red-700 text-sm">
                         <svg className="w-4 h-4 mt-0.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
                             <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
                         </svg>
-                        <span>{error}</span>
+                        {error}
                     </div>
                 )}
 
                 {/* Form */}
                 <form onSubmit={handleSubmit} className="space-y-4">
                     <div>
-                        <label className="block text-sm font-medium text-slate-700 mb-1.5">Full Name</label>
+                        <label className="block text-sm font-medium text-zinc-800 mb-1.5">Full Name</label>
                         <input
                             type="text"
                             required
                             value={name}
                             onChange={(e) => setName(e.target.value)}
-                            className="w-full px-3.5 py-2.5 bg-white rounded-lg border border-slate-300 text-slate-900 text-sm placeholder:text-slate-400 outline-none transition-all focus:border-emerald-500 focus:ring-3 focus:ring-emerald-500/10 hover:border-slate-400"
                             placeholder="Alex Johnson"
+                            className="w-full px-3.5 py-2.5 text-sm text-zinc-900 bg-white border border-gray-200 rounded-xl outline-none placeholder:text-zinc-400 transition-all hover:border-zinc-400 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10"
                         />
                     </div>
 
                     <div>
-                        <label className="block text-sm font-medium text-slate-700 mb-1.5">Email Address</label>
+                        <label className="block text-sm font-medium text-zinc-800 mb-1.5">Email Address</label>
                         <input
                             type="email"
                             required
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
-                            className="w-full px-3.5 py-2.5 bg-white rounded-lg border border-slate-300 text-slate-900 text-sm placeholder:text-slate-400 outline-none transition-all focus:border-emerald-500 focus:ring-3 focus:ring-emerald-500/10 hover:border-slate-400"
                             placeholder="you@company.com"
+                            className="w-full px-3.5 py-2.5 text-sm text-zinc-900 bg-white border border-gray-200 rounded-xl outline-none placeholder:text-zinc-400 transition-all hover:border-zinc-400 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10"
                         />
                     </div>
 
                     <div>
-                        <label className="block text-sm font-medium text-slate-700 mb-1.5">Password</label>
+                        <label className="block text-sm font-medium text-zinc-800 mb-1.5">Password</label>
                         <input
                             type="password"
                             required
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
-                            className="w-full px-3.5 py-2.5 bg-white rounded-lg border border-slate-300 text-slate-900 text-sm placeholder:text-slate-400 outline-none transition-all focus:border-emerald-500 focus:ring-3 focus:ring-emerald-500/10 hover:border-slate-400"
-                            placeholder="Min 8 characters"
+                            placeholder="Minimum 8 characters"
+                            className="w-full px-3.5 py-2.5 text-sm text-zinc-900 bg-white border border-gray-200 rounded-xl outline-none placeholder:text-zinc-400 transition-all hover:border-zinc-400 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10"
                         />
                     </div>
 
-                    {/* Submit Button */}
                     <button
                         type="submit"
                         disabled={loading}
-                        className="w-full mt-2 py-3 rounded-xl font-semibold text-sm text-white transition-all duration-150 hover:-translate-y-0.5 hover:shadow-lg active:translate-y-0 disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:translate-y-0 disabled:hover:shadow-none"
-                        style={{
-                            background: loading
-                                ? '#6b7280'
-                                : 'linear-gradient(135deg, #059669 0%, #10b981 50%, #34d399 100%)',
-                            boxShadow: loading ? 'none' : '0 4px 20px rgba(16, 185, 129, 0.35)',
-                        }}
+                        className="w-full mt-2 py-2.5 rounded-xl text-sm font-semibold text-white bg-zinc-900 hover:bg-zinc-800 transition-all duration-150 hover:-translate-y-0.5 hover:shadow-md active:translate-y-0 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0 disabled:hover:shadow-none"
                     >
                         {loading ? (
                             <span className="flex items-center justify-center gap-2">
@@ -163,41 +168,38 @@ function RegisterForm() {
                                     <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
                                     <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
                                 </svg>
-                                Creating Account...
+                                Creating account...
                             </span>
-                        ) : (
-                            `Create ${role === 'CANDIDATE' ? 'Candidate' : 'HR'} Account →`
-                        )}
+                        ) : `Create ${role === 'CANDIDATE' ? 'Candidate' : 'HR'} Account`}
                     </button>
                 </form>
 
                 {/* Divider */}
-                <div className="flex items-center gap-3 my-6">
-                    <div className="flex-1 h-px bg-slate-200" />
-                    <span className="text-xs text-slate-400 font-medium">already a member?</span>
-                    <div className="flex-1 h-px bg-slate-200" />
+                <div className="flex items-center gap-3 my-5">
+                    <div className="flex-1 h-px bg-gray-200" />
+                    <span className="text-xs text-zinc-400">already a member?</span>
+                    <div className="flex-1 h-px bg-gray-200" />
                 </div>
 
-                {/* Sign In Link */}
+                {/* Sign In */}
                 <Link
                     href="/login"
-                    className="flex items-center justify-center w-full py-2.5 rounded-xl border border-slate-200 text-slate-700 text-sm font-semibold hover:bg-slate-50 hover:border-slate-300 transition-all duration-150"
+                    className="flex items-center justify-center w-full py-2.5 rounded-xl border border-gray-200 text-zinc-800 text-sm font-semibold hover:bg-gray-50 hover:border-zinc-300 transition-all duration-150"
                 >
-                    Sign In to Your Account
+                    Sign In to Existing Account
                 </Link>
 
-                {/* Legal */}
-                <p className="text-center text-xs text-slate-400 mt-5 leading-relaxed">
+                <p className="text-center text-xs text-zinc-400 mt-5 leading-relaxed">
                     By creating an account, you agree to our{' '}
-                    <span className="text-slate-600 hover:underline cursor-pointer">Terms of Service</span>
+                    <span className="text-zinc-600 hover:underline cursor-pointer">Terms of Service</span>
                     {' '}and{' '}
-                    <span className="text-slate-600 hover:underline cursor-pointer">Privacy Policy</span>.
+                    <span className="text-zinc-600 hover:underline cursor-pointer">Privacy Policy</span>.
                 </p>
             </div>
 
             <style>{`
-                @keyframes fadeSlideUp {
-                    from { opacity: 0; transform: translateY(16px); }
+                @keyframes authFadeUp {
+                    from { opacity: 0; transform: translateY(14px); }
                     to   { opacity: 1; transform: translateY(0); }
                 }
             `}</style>
@@ -209,7 +211,7 @@ export default function Register() {
     return (
         <Suspense fallback={
             <div className="min-h-[85vh] flex items-center justify-center">
-                <div className="w-8 h-8 border-2 border-emerald-500 border-t-transparent rounded-full animate-spin" />
+                <div className="w-8 h-8 border-2 border-zinc-900 border-t-transparent rounded-full animate-spin" />
             </div>
         }>
             <RegisterForm />
