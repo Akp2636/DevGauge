@@ -71,6 +71,7 @@ const DEPARTMENT_OPTIONS = [
 
 export default function JobsPage() {
     const [savedJobs, setSavedJobs] = useState<number[]>([2]);
+    const [maxExp, setMaxExp] = useState<number>(0);
 
     const toggleSave = (id: number) => {
         setSavedJobs(prev =>
@@ -94,16 +95,27 @@ export default function JobsPage() {
                         <div className="mb-6 pb-6 border-b border-gray-100">
                             <div className="flex items-center justify-between mb-3">
                                 <h3 className="text-sm font-semibold text-gray-800">Experience</h3>
-                                <span className="text-xs font-medium text-emerald-700 bg-emerald-50 border border-emerald-100 px-2 py-0.5 rounded-full">Any</span>
+                                <span className="text-xs font-medium text-emerald-700 bg-emerald-50 border border-emerald-100 px-2 py-0.5 rounded-full">
+                                    {maxExp === 0 ? 'Any' : `${maxExp}+ Yrs`}
+                                </span>
                             </div>
-                            <div className="relative pt-3 px-1">
-                                <div className="h-1.5 w-full bg-gray-200 rounded-full overflow-hidden">
-                                    <div className="h-full bg-emerald-600 w-1/3 rounded-full" />
-                                </div>
-                                <div className="absolute top-1.5 left-[calc(33%-6px)] w-4 h-4 bg-white rounded-full shadow-md border-2 border-emerald-600 cursor-pointer" />
-                                <div className="flex justify-between text-xs text-gray-500 mt-3">
+                            <div className="pt-2">
+                                <input
+                                    type="range"
+                                    min={0}
+                                    max={15}
+                                    value={maxExp}
+                                    onChange={(e) => setMaxExp(Number(e.target.value))}
+                                    className="w-full h-1.5 rounded-full appearance-none cursor-pointer accent-emerald-600"
+                                    style={{
+                                        background: `linear-gradient(to right, #059669 ${(maxExp / 15) * 100}%, #e5e7eb ${(maxExp / 15) * 100}%)`
+                                    }}
+                                />
+                                <div className="flex justify-between text-xs text-gray-500 mt-2">
                                     <span>0 Yrs</span>
-                                    <span>Any</span>
+                                    <span className="font-medium text-gray-700">
+                                        {maxExp === 0 ? 'Any' : `${maxExp} Yr${maxExp !== 1 ? 's' : ''}`}
+                                    </span>
                                 </div>
                             </div>
                         </div>
