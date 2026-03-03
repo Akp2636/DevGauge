@@ -10,11 +10,10 @@ const DEMO_JOBS = [
         company: "Artech India",
         experience: "0-3 Yrs",
         location: "Mumbai, New Delhi",
-        description: "Manage offboarding activities, such as exit interviews and separation processing. Employee relations, screening, interviewing.",
-        tags: ["HR Executive", "Media strategy", "Process documentation"],
+        description: "Manage offboarding activities, such as exit interviews and separation processing. Support employee relations, screening and interviewing across functions.",
+        tags: ["HR Executive", "Media Strategy", "Process Documentation"],
         posted: "3+ weeks ago",
         featured: false,
-        saved: false,
     },
     {
         id: 2,
@@ -24,11 +23,10 @@ const DEMO_JOBS = [
         reviews: 7046,
         experience: "0-1 Yrs",
         location: "Kolkata",
-        description: "Qualifications - Graduate. Media strategy, process documentation, social media.",
-        tags: ["HR Executive", "Media strategy", "Process documentation"],
+        description: "Qualifications: Graduate. Responsibilities include media strategy, process documentation and social media coordination.",
+        tags: ["HR Executive", "Media Strategy", "Process Documentation"],
         posted: "3+ weeks ago",
         featured: false,
-        saved: true,
     },
     {
         id: 3,
@@ -37,197 +35,232 @@ const DEMO_JOBS = [
         rating: 3.5,
         experience: "0-5 Yrs",
         location: "Kolkata, Bhubaneswar",
-        description: "Drive sales initiatives, build client relationships, manage distribution channels efficiently.",
+        description: "Drive sales initiatives, build lasting client relationships, and manage distribution channels efficiently across assigned territories.",
         tags: ["Sales Strategy", "Channel Management"],
         posted: "2 weeks ago",
         featured: true,
-        saved: false,
     },
     {
         id: 4,
-        title: "Frontend Developer - React",
+        title: "Frontend Developer — React",
         company: "TechNova Solutions",
         rating: 4.2,
+        reviews: 312,
         experience: "2-5 Yrs",
-        location: "Remote, Bangalore",
-        description: "Build robust user interfaces using modern React, TailwindCSS. Ensure high performance and responsiveness.",
+        location: "Remote · Bangalore",
+        description: "Build robust user interfaces using modern React and TypeScript. Ensure high performance, accessibility, and responsiveness across all platforms.",
         tags: ["React", "TypeScript", "Tailwind CSS"],
         posted: "2 days ago",
         featured: true,
-        saved: false,
-    }
+    },
+];
+
+const SALARY_OPTIONS = [
+    { label: "0–3 Lakhs", count: 1417 },
+    { label: "3–6 Lakhs", count: 2445 },
+    { label: "6–10 Lakhs", count: 1834 },
+    { label: "10–15 Lakhs", count: 676 },
+];
+
+const DEPARTMENT_OPTIONS = [
+    { label: "Sales & Business Dev", count: 1219 },
+    { label: "Human Resources", count: 735 },
+    { label: "Administration", count: 300 },
+    { label: "Customer Success", count: 299 },
 ];
 
 export default function JobsPage() {
     const [savedJobs, setSavedJobs] = useState<number[]>([2]);
 
     const toggleSave = (id: number) => {
-        if (savedJobs.includes(id)) {
-            setSavedJobs(savedJobs.filter(jobId => jobId !== id));
-        } else {
-            setSavedJobs([...savedJobs, id]);
-        }
+        setSavedJobs(prev =>
+            prev.includes(id) ? prev.filter(j => j !== id) : [...prev, id]
+        );
     };
 
     return (
-        <div className="flex flex-col lg:flex-row gap-8 min-h-screen py-8 pt-4 animate-in fade-in duration-700">
+        <div
+            className="min-h-screen px-4 py-8"
+            style={{ background: '#f9fafb' }}
+        >
+            <div className="max-w-7xl mx-auto flex flex-col lg:flex-row gap-6 animate-in fade-in duration-500">
 
-            {/* Sidebar Filters */}
-            <aside className="w-full lg:w-72 flex-shrink-0 space-y-6">
-                <div className="glass p-6 rounded-2xl border border-neutral-800">
-                    <h2 className="text-xl font-bold mb-6 tracking-tight">All Filters</h2>
+                {/* ── Sidebar ── */}
+                <aside className="w-full lg:w-64 flex-shrink-0">
+                    <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-6 sticky top-20">
+                        <h2 className="text-base font-semibold text-gray-900 mb-5">Filters</h2>
 
-                    {/* Experience Filter */}
-                    <div className="mb-8 border-b border-neutral-800 pb-6">
-                        <h3 className="font-semibold mb-4 text-neutral-300 flex justify-between items-center">
-                            Experience
-                            <span className="text-xs font-normal text-emerald-400 bg-emerald-400/10 px-2 py-0.5 rounded">Any</span>
-                        </h3>
-                        <div className="relative pt-4 px-2">
-                            <div className="h-1.5 w-full bg-neutral-800 rounded-full overflow-hidden">
-                                <div className="h-full bg-gradient-to-r from-emerald-500 to-green-400 w-1/3 rounded-full"></div>
+                        {/* Experience */}
+                        <div className="mb-6 pb-6 border-b border-gray-100">
+                            <div className="flex items-center justify-between mb-3">
+                                <h3 className="text-sm font-semibold text-gray-800">Experience</h3>
+                                <span className="text-xs font-medium text-emerald-700 bg-emerald-50 border border-emerald-100 px-2 py-0.5 rounded-full">Any</span>
                             </div>
-                            <div className="absolute top-2.5 left-1/3 w-4 h-4 bg-white rounded-full shadow border-2 border-emerald-500 cursor-pointer"></div>
-                            <div className="flex justify-between text-xs text-neutral-500 mt-3 px-1">
-                                <span>0 Yrs</span>
-                                <span>Any</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* Salary Filter */}
-                    <div className="mb-8 border-b border-neutral-800 pb-6">
-                        <h3 className="font-semibold mb-4 text-neutral-300">Salary</h3>
-                        <div className="space-y-3">
-                            {[
-                                { label: "0-3 Lakhs", count: 1417 },
-                                { label: "3-6 Lakhs", count: 2445 },
-                                { label: "6-10 Lakhs", count: 1834 },
-                                { label: "10-15 Lakhs", count: 676 },
-                            ].map((item, i) => (
-                                <label key={i} className="flex items-center gap-3 cursor-pointer group">
-                                    <input type="checkbox" className="w-4 h-4 rounded border-neutral-700 bg-neutral-900 text-emerald-500 focus:ring-emerald-500 focus:ring-offset-neutral-900 accent-emerald-500" />
-                                    <span className="text-sm text-neutral-400 group-hover:text-neutral-200 transition-colors">
-                                        {item.label} <span className="text-neutral-600">({item.count})</span>
-                                    </span>
-                                </label>
-                            ))}
-                            <button className="text-emerald-400 text-sm font-medium hover:text-emerald-300 transition-colors mt-2">View More</button>
-                        </div>
-                    </div>
-
-                    {/* Department Filter */}
-                    <div>
-                        <h3 className="font-semibold mb-4 text-neutral-300">Department</h3>
-                        <div className="space-y-3">
-                            {[
-                                { label: "Sales & Business Dev", count: 1219 },
-                                { label: "Human Resources", count: 735 },
-                                { label: "Administration & Fac", count: 300 },
-                                { label: "Customer Success", count: 299 },
-                            ].map((item, i) => (
-                                <label key={i} className="flex items-center gap-3 cursor-pointer group">
-                                    <input type="checkbox" className="w-4 h-4 rounded border-neutral-700 bg-neutral-900 text-emerald-500 focus:ring-emerald-500 focus:ring-offset-neutral-900 accent-emerald-500" />
-                                    <span className="text-sm text-neutral-400 group-hover:text-neutral-200 transition-colors">
-                                        {item.label} <span className="text-neutral-600">({item.count})</span>
-                                    </span>
-                                </label>
-                            ))}
-                            <button className="text-emerald-400 text-sm font-medium hover:text-emerald-300 transition-colors mt-2">View More</button>
-                        </div>
-                    </div>
-                </div>
-            </aside>
-
-            {/* Main Content Area */}
-            <main className="flex-1 space-y-4">
-                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center p-4 glass rounded-xl border border-neutral-800 mb-6 gap-4">
-                    <p className="text-sm text-neutral-400 font-medium">
-                        1 - 4 of 3734 <span className="text-neutral-200">Portal Jobs</span>
-                    </p>
-                    <div className="flex items-center gap-3">
-                        <span className="text-sm text-neutral-500">Sort by:</span>
-                        <select className="bg-neutral-900 border border-neutral-700 text-sm rounded-lg px-3 py-1.5 focus:outline-none focus:border-emerald-500 text-neutral-200 cursor-pointer">
-                            <option>Relevance</option>
-                            <option>Date Posted</option>
-                            <option>Salary: High to Low</option>
-                        </select>
-                    </div>
-                </div>
-
-                {/* Job List */}
-                <div className="space-y-5">
-                    {DEMO_JOBS.map((job) => (
-                        <div key={job.id} className="relative group glass p-6 rounded-2xl border border-neutral-800 hover:border-neutral-600 transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_8px_30px_rgb(0,0,0,0.12)] hover:shadow-emerald-900/20">
-
-                            {/* Featured Badge */}
-                            {job.featured && (
-                                <div className="absolute top-0 right-8 -translate-y-1/2 bg-gradient-to-r from-emerald-500 to-cyan-500 text-white text-[10px] font-bold px-3 py-1 rounded-full shadow-lg">
-                                    FEATURED
+                            <div className="relative pt-3 px-1">
+                                <div className="h-1.5 w-full bg-gray-200 rounded-full overflow-hidden">
+                                    <div className="h-full bg-emerald-600 w-1/3 rounded-full" />
                                 </div>
-                            )}
+                                <div className="absolute top-1.5 left-[calc(33%-6px)] w-4 h-4 bg-white rounded-full shadow-md border-2 border-emerald-600 cursor-pointer" />
+                                <div className="flex justify-between text-xs text-gray-500 mt-3">
+                                    <span>0 Yrs</span>
+                                    <span>Any</span>
+                                </div>
+                            </div>
+                        </div>
 
-                            <div className="flex justify-between items-start mb-4">
-                                <div>
-                                    <h2 className="text-xl font-bold text-neutral-100 group-hover:text-emerald-400 transition-colors cursor-pointer mb-2">
-                                        {job.title}
-                                    </h2>
-                                    <div className="flex items-center gap-3 text-sm text-neutral-400">
-                                        <span className="font-semibold text-neutral-300">{job.company}</span>
-                                        {job.rating && (
-                                            <div className="flex items-center gap-1 text-yellow-500 bg-yellow-500/10 px-1.5 py-0.5 rounded text-xs font-bold">
-                                                <StarIcon className="w-3 h-3" />
-                                                {job.rating} {job.reviews && <span className="text-neutral-500 font-normal ml-0.5">({job.reviews})</span>}
-                                            </div>
+                        {/* Salary */}
+                        <div className="mb-6 pb-6 border-b border-gray-100">
+                            <h3 className="text-sm font-semibold text-gray-800 mb-3">Salary</h3>
+                            <div className="space-y-2.5">
+                                {SALARY_OPTIONS.map((item, i) => (
+                                    <label key={i} className="flex items-center gap-2.5 cursor-pointer group">
+                                        <input
+                                            type="checkbox"
+                                            className="w-4 h-4 rounded border-gray-300 text-emerald-600 accent-emerald-600 focus:ring-emerald-500"
+                                        />
+                                        <span className="text-sm text-gray-700 group-hover:text-gray-900 transition-colors">
+                                            {item.label}
+                                        </span>
+                                        <span className="text-xs text-gray-500 ml-auto">({item.count})</span>
+                                    </label>
+                                ))}
+                                <button className="text-emerald-600 text-xs font-semibold hover:text-emerald-700 transition-colors mt-1 block">
+                                    View more
+                                </button>
+                            </div>
+                        </div>
+
+                        {/* Department */}
+                        <div>
+                            <h3 className="text-sm font-semibold text-gray-800 mb-3">Department</h3>
+                            <div className="space-y-2.5">
+                                {DEPARTMENT_OPTIONS.map((item, i) => (
+                                    <label key={i} className="flex items-center gap-2.5 cursor-pointer group">
+                                        <input
+                                            type="checkbox"
+                                            className="w-4 h-4 rounded border-gray-300 text-emerald-600 accent-emerald-600 focus:ring-emerald-500"
+                                        />
+                                        <span className="text-sm text-gray-700 group-hover:text-gray-900 transition-colors">
+                                            {item.label}
+                                        </span>
+                                        <span className="text-xs text-gray-500 ml-auto">({item.count})</span>
+                                    </label>
+                                ))}
+                                <button className="text-emerald-600 text-xs font-semibold hover:text-emerald-700 transition-colors mt-1 block">
+                                    View more
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </aside>
+
+                {/* ── Main ── */}
+                <main className="flex-1 min-w-0">
+                    {/* Results bar */}
+                    <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center bg-white border border-gray-200 rounded-xl shadow-sm px-5 py-3 mb-5 gap-3">
+                        <p className="text-sm text-gray-600">
+                            Showing <span className="font-semibold text-gray-900">1–4</span> of{' '}
+                            <span className="font-semibold text-gray-900">3,734</span> jobs
+                        </p>
+                        <div className="flex items-center gap-2">
+                            <span className="text-sm text-gray-600">Sort by:</span>
+                            <select className="text-sm border border-gray-200 bg-white text-gray-800 rounded-lg px-3 py-1.5 outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/10 cursor-pointer">
+                                <option>Relevance</option>
+                                <option>Date Posted</option>
+                                <option>Salary: High to Low</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    {/* Job Cards */}
+                    <div className="space-y-4">
+                        {DEMO_JOBS.map((job) => (
+                            <div
+                                key={job.id}
+                                className="relative bg-white rounded-2xl border border-gray-200 shadow-sm hover:shadow-md hover:border-gray-300 hover:-translate-y-0.5 transition-all duration-200 p-6 group"
+                            >
+                                {/* Featured badge */}
+                                {job.featured && (
+                                    <div className="absolute top-0 right-6 -translate-y-1/2 bg-zinc-900 text-white text-[10px] font-bold tracking-wider px-3 py-1 rounded-full shadow-sm">
+                                        FEATURED
+                                    </div>
+                                )}
+
+                                {/* Card header */}
+                                <div className="flex justify-between items-start gap-4 mb-3">
+                                    <div className="flex-1 min-w-0">
+                                        <h2 className="text-base font-semibold text-gray-900 group-hover:text-emerald-700 transition-colors cursor-pointer leading-snug mb-1.5 truncate">
+                                            {job.title}
+                                        </h2>
+                                        <div className="flex items-center gap-2 flex-wrap">
+                                            <span className="text-sm font-medium text-gray-700">{job.company}</span>
+                                            {job.rating && (
+                                                <div className="flex items-center gap-1 text-amber-500 bg-amber-50 border border-amber-100 px-1.5 py-0.5 rounded text-xs font-semibold">
+                                                    <StarIcon className="w-3 h-3" />
+                                                    {job.rating}
+                                                    {job.reviews && (
+                                                        <span className="text-gray-500 font-normal ml-0.5">({job.reviews.toLocaleString()})</span>
+                                                    )}
+                                                </div>
+                                            )}
+                                        </div>
+                                    </div>
+
+                                    {/* Save button */}
+                                    <button
+                                        onClick={() => toggleSave(job.id)}
+                                        className="p-2 rounded-lg hover:bg-gray-100 text-gray-400 hover:text-gray-700 transition-colors flex-shrink-0"
+                                        title={savedJobs.includes(job.id) ? 'Unsave job' : 'Save job'}
+                                    >
+                                        {savedJobs.includes(job.id) ? (
+                                            <BookmarkSolidIcon className="w-5 h-5 text-emerald-600" />
+                                        ) : (
+                                            <BookmarkIcon className="w-5 h-5" />
                                         )}
+                                    </button>
+                                </div>
+
+                                {/* Meta info */}
+                                <div className="flex flex-wrap gap-4 text-sm text-gray-600 mb-3">
+                                    <div className="flex items-center gap-1.5">
+                                        <BriefcaseIcon className="w-4 h-4 text-gray-400" />
+                                        {job.experience}
+                                    </div>
+                                    <div className="flex items-center gap-1.5">
+                                        <MapPinIcon className="w-4 h-4 text-gray-400" />
+                                        {job.location}
                                     </div>
                                 </div>
-                                {/* Save Button */}
-                                <button
-                                    onClick={() => toggleSave(job.id)}
-                                    className="p-2 rounded-full hover:bg-neutral-800 text-neutral-400 hover:text-emerald-400 transition-colors"
-                                >
-                                    {savedJobs.includes(job.id) ? (
-                                        <BookmarkSolidIcon className="w-6 h-6 text-emerald-500" />
-                                    ) : (
-                                        <BookmarkIcon className="w-6 h-6" />
-                                    )}
-                                </button>
-                            </div>
 
-                            <div className="flex flex-wrap gap-4 text-sm text-neutral-400 mb-5">
-                                <div className="flex items-center gap-1.5">
-                                    <BriefcaseIcon className="w-4 h-4 text-neutral-500" />
-                                    {job.experience}
+                                {/* Description */}
+                                <p className="text-sm text-gray-600 leading-relaxed mb-4 line-clamp-2">
+                                    {job.description}
+                                </p>
+
+                                {/* Tags */}
+                                <div className="flex items-center gap-2 flex-wrap mb-5">
+                                    {job.tags.map((tag, i) => (
+                                        <span
+                                            key={i}
+                                            className="text-xs font-medium px-2.5 py-1 rounded-full bg-gray-100 text-gray-700 border border-gray-200"
+                                        >
+                                            {tag}
+                                        </span>
+                                    ))}
                                 </div>
-                                <div className="flex items-center gap-1.5">
-                                    <MapPinIcon className="w-4 h-4 text-neutral-500" />
-                                    {job.location}
+
+                                {/* Footer */}
+                                <div className="flex justify-between items-center pt-4 border-t border-gray-100">
+                                    <span className="text-xs text-gray-500">{job.posted}</span>
+                                    <button className="px-5 py-2 bg-zinc-900 hover:bg-zinc-800 text-white text-sm font-semibold rounded-lg transition-all duration-150 hover:-translate-y-0.5 hover:shadow-md active:translate-y-0">
+                                        Easy Apply
+                                    </button>
                                 </div>
                             </div>
-
-                            <p className="text-sm text-neutral-400 leading-relaxed mb-6 line-clamp-2">
-                                {job.description}
-                            </p>
-
-                            <div className="flex items-center gap-2 mb-6 flex-wrap">
-                                {job.tags.map((tag, i) => (
-                                    <span key={i} className="text-xs px-2.5 py-1 rounded-full bg-neutral-800/50 text-neutral-300 border border-neutral-700/50">
-                                        {tag}
-                                    </span>
-                                ))}
-                            </div>
-
-                            <div className="flex justify-between items-center pt-5 border-t border-neutral-800">
-                                <span className="text-xs text-neutral-500">{job.posted}</span>
-                                <button className="px-5 py-2 bg-emerald-600/10 hover:bg-emerald-600 border border-emerald-500/30 hover:border-emerald-500 text-emerald-400 hover:text-white rounded-lg text-sm font-semibold transition-all shadow-lg shadow-emerald-900/10 hover:shadow-emerald-600/20 active:scale-95">
-                                    Easy Apply
-                                </button>
-                            </div>
-                        </div>
-                    ))}
-                </div>
-            </main>
+                        ))}
+                    </div>
+                </main>
+            </div>
         </div>
     );
 }
